@@ -9,11 +9,21 @@ const passport = require('passport')
 const config = require('./config/connection')
 
 
+// Routes
+const userRoutes = require('./routes/user')
+
+
 // DB Connection
-mongoose.connect(config.connect, { useNewUrlParser: true }).then(
-  () => {console.log('Database is connected') },
-  err => { console.log('Cannot connect to the database'+ err)}
-)
+mongoose.connect(config.connect, { useNewUrlParser: true })
+
+const db = mongoose.connection
+db.on('error', console.error.bind(`Cannot connect to the database: ${console}`))
+db.once('open', () => console.log('Database is connected'))
+
+
+// Passport
+app.use(passport.initialize())
+require('./config/passport')(passport)
 
 
 // Body Parser
@@ -22,9 +32,7 @@ app.use(bodyParser.json())
 
 
 // App Routes
-app.get('/', function(req, res) {
-  res.send('hello')
-})
+app.use('/api/users', userRoutes)
 
 
 // Init

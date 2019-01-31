@@ -1,9 +1,9 @@
-# ZenChi Apps
+# ZenChi Product Inventory
   
-**Description**:  ZenChi Apps is a growing collection of reuseable React components that have been
-                  built with user-accessibilty in mind to provide the best experience across all platforms
+**Description**:  The ZenChi Product Inventory app uses MERN to connect to MongoDB and Redux reducers to handle
+                  state management.
 
-**Version**:      [0.1.2](#v012)  
+**Version**:      [0.1.3](#v013)  
 **Author**:       Elijah Liedtke (Chimera.Zen)  
 **Email**:        [chimera.zen@gmail.com](mailto:chimera.zen@gmail.com)  
 **Link**:         https://github.com/ChimeraZen/zenchiapps
@@ -17,6 +17,15 @@
 ---
 
 ## ChangeLog
+### v0.1.3
+* Initialized backend user (routes && controllers)
+* Initialized backend user model
+* Initialized backend Passport.js
+* Initialized backend login and user validation
+* Updated server.js mongoose connection
+
+
+
 ### v0.1.2
 * Initialized backend server.js
 * Initialized MongoDB connection string
