@@ -3,10 +3,10 @@
 **Description**:  The ZenChi Product Inventory app uses MERN to connect to MongoDB and Redux reducers to handle
                   state management.
 
-**Version**:      [0.1.5](#v015)  
+**Version**:      [0.2.0](#v020)  
 **Author**:       Elijah Liedtke (Chimera.Zen)  
 **Email**:        [chimera.zen@gmail.com](mailto:chimera.zen@gmail.com)  
-**Link**:         https://github.com/ChimeraZen/zenchiapps
+**Link**:         https://github.com/ChimeraZen/zenchi-product-inventory
 
 **Copyright**:    Copyright (c) 2018, Elijah Liedtke  
 **License**:      http://www.gnu.org/licenses/gpl-3.0.html
@@ -17,8 +17,27 @@
 ---
 
 ## ChangeLog
+### v0.2.0
+* Initialized:
+  * store
+  * authToken
+  * actions
+  * reducers
+  * public and protected route logic
+  * login component
+  * navbar component
+* Create pages:
+  * Public Home
+  * Admin Home
+  * Admin->Users **Prepped page - waiting for modal form component && shows user table - **
+  * Admin->Settings **Prepped page - no content - **
+** Some files are prepped for product reducers, actions and routes but commented out **
+
+
+
 ### v0.1.5
 * Fixed backend errors
+* Added jQuery, Bootstrap, and Font Awesome icons
 
 
 

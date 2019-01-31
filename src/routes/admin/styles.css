@@ -1,0 +1,18 @@
+section.admin-route {
+  height: stretch;
+}
+
+.open {
+  max-width: inherit;
+  transition: max-width 0.3s ease-in-out;
+}
+
+.closed {
+  max-width: 0 !important;
+  overflow: hidden;
+  transition: max-width 0.3s ease-in-out;
+}
+
+.pointer {
+  cursor: pointer;
+}
