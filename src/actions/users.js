@@ -24,9 +24,9 @@ const setUsers = users => {
 
 // CRUD
 // Create
-export const addUser = (user, history) => async dispatch => {
+export const addUser = user => dispatch => {
   try{
-    await axios.post(`${SERVER_URL}/addUser`, user)
+    axios.put(`${SERVER_URL}/addUser`, user)
   } catch(err) {
     dispatch({
       type: errorTypes.GET_ERRORS,

@@ -9,13 +9,15 @@ import { addUser, getUsers, updateUsers } from 'actions/users'
 
 class UserForm extends Component {
   state = {
+    username: '',
     firstname: '',
     lastname: '',
     email: '',
     password: '',
-    password_confirm: '',
+    passwordConfirm: '',
     role: 'staff',
     formTitle: 'Add User',
+    users: [],
     errors: {}
   }
 
@@ -23,25 +25,20 @@ class UserForm extends Component {
     const { formType, users } = this.props
     if (prevProps !== this.props) {
       if (users.length > 0 && formType === 'update') {
-        const user = users[0]
         this.setState({
-          firstname: user.firstname,
-          lastname: user.lastname,
-          password: '',
-          password_confirm: '',
-          email: user.email,
-          role: user.role,
+          users: users,
           formTitle: 'Update User'
         })
       }
       
       if (formType === 'new') {
         this.setState({
+          username: '',
           firstname: '',
           lastname: '',
           email: '',
           password: '',
-          password_confirm: '',
+          passwordConfirm: '',
           role: 'staff',
           errors: {},
           formTitle: 'Add User'
@@ -49,6 +46,7 @@ class UserForm extends Component {
       }
     }
   }
+
 
   // Handlers
   handleInputChange = e => {
@@ -58,34 +56,330 @@ class UserForm extends Component {
   }
   handleSubmit = e => {
     e.preventDefault()
-    const { formType } = this.props
     const user = {
-      name: this.state.name,
+      username: this.state.username,
+      firstname: this.state.firstname,
+      lastname: this.state.lastname,
       email: this.state.email,
       password: this.state.password,
-      password_confirm: this.state.password_confirm,
+      passwordConfirm: this.state.passwordConfirm,
       role: this.state.role
     }
     
-    switch(formType) {
-      case 'update':
-        this.props.dispatch(updateUsers([user]))
-      break;
-        
-      case 'new':
-        this.props.dispatch(addUser(user))
-      break;
-        
-      default:
-      break;
-    }
-    //this.props.addUser(user)
+    this.props.dispatch(addUser(user))
     this.props.dispatch(getUsers())
     $('.close').click()
   }
   
+  handleInputChangeMany = e => {
+    const users = [...this.state.users]
+    const id = parseInt(e.target.dataset.id)
+    
+    users[id][e.target.name] = e.target.value
+    
+    this.setState({
+      users
+    })
+  }
+  handleSubmitMany = e => {
+    e.preventDefault()
+    const users = [...this.state.users]
+    const id = parseInt(e.target.dataset.id)
+    
+    this.props.dispatch(updateUsers(users[id]))
+    this.props.dispatch(getUsers())
+    $('.close').click()
+  }
+  
+  
+  // Forms
+  newForm = () => {
+    const { errors } = this.state
+    
+    return (
+      <form onSubmit={ this.handleSubmit }>
+        {/* Username */}
+        <div className="form-row">
+          <div className="form-group col-md-12">
+            <label htmlFor="user-name">Username</label>
+            <input
+              id="user-name"
+              type="text"
+              placeholder="Username"
+              className={classnames('form-control form-control-lg', {
+                'is-invalid': errors.username
+              })}
+              name="username"
+              onChange={ this.handleInputChange }
+              value={ this.state.username }
+            />
+            {errors.username && (<div className="invalid-feedback">{errors.username}</div>)}
+          </div>
+        </div>
+
+
+        {/* Name */}
+        <div className="form-row">
+          <div className="form-group col-md-6">
+            <label htmlFor="user-first-name">Name</label>
+            <input
+              id="user-first-name"
+              type="text"
+              placeholder="First Name"
+              className={classnames('form-control form-control-lg', {
+                'is-invalid': errors.firstname
+              })}
+              name="firstname"
+              onChange={ this.handleInputChange }
+              value={ this.state.firstname }
+            />
+            {errors.firstname && (<div className="invalid-feedback">{errors.firstname}</div>)}
+          </div>
+          <div className="form-group col-md-6">
+            <label htmlFor="user-last-name">&nbsp;</label>
+            <input
+              id="user-last-name"
+              type="text"
+              placeholder="Last Name"
+              className={classnames('form-control form-control-lg', {
+                'is-invalid': errors.lastname
+              })}
+              name="lastname"
+              onChange={ this.handleInputChange }
+              value={ this.state.lastname }
+            />
+            {errors.lastname && (<div className="invalid-feedback">{errors.lastname}</div>)}
+          </div>
+        </div>
+
+
+        {/* Email */}
+        <div className="form-row">
+          <div className="form-group col-12">
+            <label htmlFor="user-email">Email</label>
+            <input
+              id="user-email"
+              type="email"
+              placeholder="Email"
+              className={classnames('form-control form-control-lg', {
+                'is-invalid': errors.email
+              })}
+              name="email"
+              onChange={ this.handleInputChange }
+              value={ this.state.email }
+            />
+            {errors.email && (<div className="invalid-feedback">{errors.email}</div>)}
+          </div>
+        </div>
+
+
+        {/* Password */}
+        <div className="form-row">
+          <div className="form-group col-12">
+            <label htmlFor="user-password">Password</label>
+            <input
+              id="user-password"
+              type="password"
+              placeholder="Password"
+              className={classnames('form-control form-control-lg', {
+                'is-invalid': errors.password
+              })}
+              name="password"
+              onChange={ this.handleInputChange }
+              value={ this.state.password }
+            />
+            {errors.password && (<div className="invalid-feedback">{errors.password}</div>)}
+          </div>
+          <div className="form-group col-12">
+            <input
+              type="password"
+              placeholder="Confirm Password"
+              className={classnames('form-control form-control-lg', {
+                'is-invalid': errors.passwordConfirm
+              })}
+              name="passwordConfirm"
+              onChange={ this.handleInputChange }
+              value={ this.state.passwordConfirm }
+            />
+            {errors.passwordConfirm && (<div className="invalid-feedback">{errors.passwordConfirm}</div>)}
+          </div>
+        </div>
+
+
+        {/* Role */}
+        <div className="form-group">
+          <label htmlFor="user-role">Role:</label>
+          <select id="user-role" name="role" className="custom-select" value={this.state.role} onChange={this.handleInputChange}>
+            <option value="super">Super User</option>
+            <option value="admin">Admin</option>
+            <option value="staff">Staff</option>
+          </select>
+        </div>
+
+        {/* Buttons */}
+        <div className="modal-footer">
+          <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" className="btn btn-success">Save</button>
+        </div>
+      </form>
+    )
+  }
+  updateForms = () => {
+    const { users, errors } = this.state
+    const userForms = users.length > 0 && users.map((user, i) => {
+      
+      return (
+        <form key={`user${i}`} id={`user-form-${i}`} data-id={i} onSubmit={ this.handleSubmitMany }>
+          {/* Username */}
+          <div className="form-row">
+            <div className="form-group col-md-12">
+              <label htmlFor="user-name">Username</label>
+              <input
+                id="user-name"
+                data-id={i}
+                type="text"
+                placeholder="Username"
+                className={classnames('form-control form-control-lg', {
+                  'is-invalid': errors.username
+                })}
+                name="username"
+                onChange={ this.handleInputChangeMany }
+                value={ user.username }
+              />
+              {errors.username && (<div className="invalid-feedback">{errors.username}</div>)}
+            </div>
+          </div>
+          
+          
+          {/* Name */}
+          <div className="form-row">
+            <div className="form-group col-md-6">
+              <label htmlFor="user-first-name">Name</label>
+              <input
+                id="user-first-name"
+                data-id={i}
+                type="text"
+                placeholder="First Name"
+                className={classnames('form-control form-control-lg', {
+                  'is-invalid': errors.firstname
+                })}
+                name="firstname"
+                onChange={ this.handleInputChangeMany }
+                value={ user.firstname }
+              />
+              {errors.firstname && (<div className="invalid-feedback">{errors.firstname}</div>)}
+            </div>
+            <div className="form-group col-md-6">
+              <label htmlFor="user-last-name">&nbsp;</label>
+              <input
+                id="user-last-name"
+                data-id={i}
+                type="text"
+                placeholder="Last Name"
+                className={classnames('form-control form-control-lg', {
+                  'is-invalid': errors.lastname
+                })}
+                name="lastname"
+                onChange={ this.handleInputChangeMany }
+                value={ user.lastname }
+              />
+              {errors.lastname && (<div className="invalid-feedback">{errors.lastname}</div>)}
+            </div>
+          </div>
+
+
+          {/* Email */}
+          <div className="form-row">
+            <div className="form-group col-12">
+              <label htmlFor="user-email">Email</label>
+              <input
+                id="user-email"
+                data-id={i}
+                type="email"
+                placeholder="Email"
+                className={classnames('form-control form-control-lg', {
+                  'is-invalid': errors.email
+                })}
+                name="email"
+                onChange={ this.handleInputChangeMany }
+                value={ user.email }
+              />
+              {errors.email && (<div className="invalid-feedback">{errors.email}</div>)}
+            </div>
+          </div>
+
+
+          {/* Password */}
+          <div className="form-row">
+            <div className="form-group col-12">
+              <label htmlFor="user-password">Password</label>
+              <input
+                id="user-password"
+                data-id={i}
+                type="password"
+                placeholder="Password"
+                className={classnames('form-control form-control-lg', {
+                  'is-invalid': errors.password
+                })}
+                name="password"
+                onChange={ this.handleInputChangeMany }
+                value={ user.newPassword || '' }
+              />
+              {errors.password && (<div className="invalid-feedback">{errors.password}</div>)}
+            </div>
+            <div className="form-group col-12">
+              <input
+                type="password"
+                data-id={i}
+                placeholder="Confirm Password"
+                className={classnames('form-control form-control-lg', {
+                  'is-invalid': errors.passwordConfirm
+                })}
+                name="passwordConfirm"
+                onChange={ this.handleInputChangeMany }
+                value={ user.newPassword_confirm || ''}
+              />
+              {errors.passwordConfirm && (<div className="invalid-feedback">{errors.passwordConfirm}</div>)}
+            </div>
+          </div>
+
+
+          {/* Role */}
+          <div className="form-row">
+            <div className="form-group">
+              <label htmlFor="user-role">Role:</label>
+              <select 
+                id="user-role"
+                data-id={i} 
+                name="role" 
+                className="custom-select" 
+                value={user.role} 
+                onChange={this.handleInputChangeMany}
+              >
+                <option value="super">Super User</option>
+                <option value="admin">Admin</option>
+                <option value="staff">Staff</option>
+              </select>
+            </div>
+          </div>
+
+          {/* Buttons */}
+          <div className="modal-footer">
+            <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" className="btn btn-success">Save</button>
+          </div>
+        </form>
+      )
+    })
+    
+    return <div className="d-flex">
+      {userForms}
+    </div>
+    
+  }
+  
   render() {
-    const { formTitle, errors } = this.state
+    const { formTitle } = this.state
     const { formType } = this.props
     
     return (
@@ -99,110 +393,8 @@ class UserForm extends Component {
               </button>
             </div>
             <div className="modal-body">
-              <form onSubmit={ this.handleSubmit }>
-                <div className="form-row">
-                  
-                  {/* Name */}
-                  <div className="form-group col-md-6">
-                    <label htmlFor="user-first-name">Name</label>
-                    <input
-                      id="user-first-name"
-                      type="text"
-                      placeholder="First Name"
-                      className={classnames('form-control form-control-lg', {
-                        'is-invalid': errors.name
-                      })}
-                      name="firstname"
-                      onChange={ this.handleInputChange }
-                      value={ this.state.firstname }
-                    />
-                    {errors.name && (<div className="invalid-feedback">{errors.name}</div>)}
-                  </div>
-                  <div className="form-group col-md-6">
-                    <label htmlFor="user-last-name">&nbsp;</label>
-                    <input
-                      id="user-last-name"
-                      type="text"
-                      placeholder="Last Name"
-                      className={classnames('form-control form-control-lg', {
-                        'is-invalid': errors.name
-                      })}
-                      name="lastname"
-                      onChange={ this.handleInputChange }
-                      value={ this.state.lastname }
-                    />
-                    {errors.name && (<div className="invalid-feedback">{errors.name}</div>)}
-                  </div>
-                </div>
-                
-                
-                {/* Email */}
-                <div className="form-row">
-                  <div className="form-group col-12">
-                    <label htmlFor="user-email">Email</label>
-                    <input
-                      id="user-email"
-                      type="email"
-                      placeholder="Email"
-                      className={classnames('form-control form-control-lg', {
-                        'is-invalid': errors.email
-                      })}
-                      name="email"
-                      onChange={ this.handleInputChange }
-                      value={ this.state.email }
-                    />
-                    {errors.email && (<div className="invalid-feedback">{errors.email}</div>)}
-                  </div>
-                </div>
-                
-                
-                {/* Password */}
-                <div className="form-row">
-                  <div className="form-group col-12">
-                    <label htmlFor="user-password">Password</label>
-                    <input
-                      id="user-password"
-                      type="password"
-                      placeholder="Password"
-                      className={classnames('form-control form-control-lg', {
-                        'is-invalid': errors.password
-                      })}
-                      name="password"
-                      onChange={ this.handleInputChange }
-                      value={ this.state.password }
-                    />
-                    {errors.password && (<div className="invalid-feedback">{errors.password}</div>)}
-                  </div>
-                  <div className="form-group col-12">
-                    <input
-                      type="password"
-                      placeholder="Confirm Password"
-                      className={classnames('form-control form-control-lg', {
-                        'is-invalid': errors.password_confirm
-                      })}
-                      name="password_confirm"
-                      onChange={ this.handleInputChange }
-                      value={ this.state.password_confirm }
-                    />
-                    {errors.password_confirm && (<div className="invalid-feedback">{errors.password_confirm}</div>)}
-                  </div>
-                </div>
-                
-                
-                {/* Role */}
-                <div className="form-group">
-                  <label htmlFor="user-role">Role:</label>
-                  <select id="user-role" name="role" className="custom-select" value={this.state.role} onChange={this.handleInputChange}>
-                    <option value="super">Super User</option>
-                    <option value="admin">Admin</option>
-                    <option value="staff">Staff</option>
-                  </select>
-                </div>
-                <div className="modal-footer">
-                  <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-                  <button type="submit" className="btn btn-success">Save</button>
-                </div>
-              </form>
+              {formType === 'new' && this.newForm()}
+              {formType === 'update' && this.updateForms()}
             </div>
           </div>
         </div>

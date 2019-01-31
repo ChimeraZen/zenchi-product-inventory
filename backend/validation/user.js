@@ -3,16 +3,18 @@
 const Validator = require('validator')
 const isEmpty = require('./is-empty')
 
-module.exports.validateAddUserInput = data => {
+module.exports = data => {
   let errors = {}
-  data.name = !isEmpty(data.name) ? data.name : ''
+  data.username = !isEmpty(data.username) ? data.username : ''
+  data.firstname = !isEmpty(data.firstname) ? data.firstname : ''
+  data.lastname = !isEmpty(data.lastname) ? data.lastname : ''
   data.email = !isEmpty(data.email) ? data.email : ''
   data.password = !isEmpty(data.password) ? data.password : ''
-  data.password_confirm = !isEmpty(data.password_confirm) ? data.password_confirm : ''
+  data.passwordConfirm = !isEmpty(data.passwordConfirm) ? data.passwordConfirm : ''
 
   
   // Name
-  if(!Validator.isLength(data.name, { min: 2, max: 30 })) {
+  if(!Validator.isLength(data.username, { min: 2, max: 30 })) {
     errors.username = 'Username must be between 2 to 30 chars'
   }
 
@@ -21,11 +23,11 @@ module.exports.validateAddUserInput = data => {
   }
 
   if(Validator.isEmpty(data.firstname)) {
-    errors.username = 'First name is required'
+    errors.firstname = 'First name is required'
   }
 
-  if(Validator.isEmpty(data.firstname)) {
-    errors.username = 'Last name is required'
+  if(Validator.isEmpty(data.lastname)) {
+    errors.lastname = 'Last name is required'
   }
 
   
@@ -48,16 +50,16 @@ module.exports.validateAddUserInput = data => {
     errors.password = 'Password is required'
   }
 
-  if(!Validator.isLength(data.password_confirm, {min: 6, max: 30})) {
-    errors.password_confirm = 'Password must have 6 chars'
+  if(!Validator.isLength(data.passwordConfirm, {min: 6, max: 30})) {
+    errors.passwordConfirm = 'Password must have 6 chars'
   }
 
-  if(!Validator.equals(data.password, data.password_confirm)) {
-    errors.password_confirm = 'Password and Confirm Password must match'
+  if(!Validator.equals(data.password, data.passwordConfirm)) {
+    errors.passwordConfirm = 'Password and Confirm Password must match'
   }
 
-  if(Validator.isEmpty(data.password_confirm)) {
-    errors.password_confirm = 'Password is required'
+  if(Validator.isEmpty(data.passwordConfirm)) {
+    errors.passwordConfirm = 'Password is required'
   }
 
   return {

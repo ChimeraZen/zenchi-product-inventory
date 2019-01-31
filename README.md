@@ -3,7 +3,7 @@
 **Description**:  The ZenChi Product Inventory app uses MERN to connect to MongoDB and Redux reducers to handle
                   state management.
 
-**Version**:      [0.2.0](#v020)  
+**Version**:      [0.2.1](#v021)  
 **Author**:       Elijah Liedtke (Chimera.Zen)  
 **Email**:        [chimera.zen@gmail.com](mailto:chimera.zen@gmail.com)  
 **Link**:         https://github.com/ChimeraZen/zenchi-product-inventory
@@ -17,6 +17,12 @@
 ---
 
 ## ChangeLog
+### v0.2.1
+* Initialized user form modal
+* Form update is Prepped for multi-update
+
+
+
 ### v0.2.0
 * Initialized:
   * store

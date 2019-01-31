@@ -22,7 +22,6 @@ module.exports.addUser = async (req, res) => {
     const userExists = await User.findOne({
       email: user.email
     })
-    
     if(userExists) {
       return res.status(400).json({
         email: 'Email already exists'
@@ -40,16 +39,14 @@ module.exports.addUser = async (req, res) => {
       role: user.role
     })
     
-    
     // Bcrypt salt & hash password
     const salt = await bcrypt.genSalt(10)
     const hash = salt && await bcrypt.hash(newUser.password, salt)
+    
     newUser.password = hash
     newUser.save()
     
-    return res.status(200).json({
-      msg: 'User created successfully'
-    })
+    return res.status(200)
   } catch(err) {
     console.log(`User creation error: ${err}`)
     res.status(400)
@@ -70,13 +67,10 @@ module.exports.getUsers = async (req, res) => {
 
 
 // Update
-module.exports.updateUsers = (req, res) => {
+module.exports.updateUsers = async (req, res) => {
   try {
-    const users = req.body
-    
-    users.forEach(async user => {
-      await User.findByIdAndUpdate({ _id: user._id }, user)
-    })
+    const user = req.body
+    await User.findByIdAndUpdate({ _id: user._id }, user)
     
     return res.status(204)
   } catch (err) {

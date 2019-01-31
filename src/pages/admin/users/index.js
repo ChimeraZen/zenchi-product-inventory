@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 
-//import UserForm from 'components/admin/forms/user'
+import UserForm from 'components/admin/forms/user'
 
 // Actions
 import { getUsers, deleteUsers } from 'actions/users'
@@ -176,7 +176,7 @@ class UsersPage extends Component {
             </tbody>
           </table>
         </section>
-        {/* <UserForm formType={formType} users={updateUsers} /> */}
+        <UserForm formType={formType} users={updateUsers} />
       </section>
     )
   }

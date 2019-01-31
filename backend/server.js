@@ -14,7 +14,7 @@ const userRoutes = require('./routes/user')
 
 
 // DB Connection
-mongoose.connect(config.connect, { useNewUrlParser: true })
+mongoose.connect(config.connect, { useNewUrlParser: true, useFindAndModify: false })
 
 const db = mongoose.connection
 db.on('error', console.error.bind(`Cannot connect to the database: ${console}`))
