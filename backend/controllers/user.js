@@ -1,7 +1,7 @@
 // backend/controllers/user.js
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
-const validateAddUserInput = require('../validation/user.js')
+const validateAddUserInput = require('../validation/user')
 const validateLoginInput = require('../validation/login')
 
 // Models
