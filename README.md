@@ -3,7 +3,7 @@
 **Description**:  ZenChi Apps is a growing collection of reuseable React components that have been
                   built with user-accessibilty in mind to provide the best experience across all platforms
 
-**Version**:      [0.1.1](#v011)  
+**Version**:      [0.1.2](#v012)  
 **Author**:       Elijah Liedtke (Chimera.Zen)  
 **Email**:        [chimera.zen@gmail.com](mailto:chimera.zen@gmail.com)  
 **Link**:         https://github.com/ChimeraZen/zenchiapps
@@ -17,6 +17,13 @@
 ---
 
 ## ChangeLog
+### v0.1.2
+* Initialized backend server.js
+* Initialized MongoDB connection string
+* Set NODE_PATH=src/
+
+
+
 ### v0.1.1
 * Initialized backend package.json
 * Installed Dependencies and devDependencies
