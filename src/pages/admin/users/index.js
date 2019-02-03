@@ -2,11 +2,13 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
+import $ from 'jquery'
 
+import Modal from 'components/modal'
 import UserForm from 'components/admin/forms/user'
 
 // Actions
-import { getUsers, deleteUsers } from 'actions/users'
+import { getUsers, deleteUser, updateUser } from 'actions/users'
 
 import './styles.css'
 
@@ -18,10 +20,27 @@ class UsersPage extends Component {
       checkAll: false,
       checked: [],
       formType: 'new',
-      updateUsers: []
+      formTitle: '',
+      formData: [],
+      saveAll: false
     }
     
-    this.props.dispatch(getUsers())
+    this.props.getUsers()
+  }
+  
+  componentDidUpdate(prevProps, prevState) {
+    if(this.state.saveAll === true) {
+      if(prevProps.userContext === this.props.userContext) {
+        this.setState({
+          checkAll: false,
+          checked: [],
+          formType: 'new',
+          formTitle: '',
+          formData: [],
+          saveAll: false
+        })
+      }
+    }
   }
   
   // Row Handlers
@@ -30,25 +49,29 @@ class UsersPage extends Component {
     const userCount = this.props.userContext.users.length
     
     let checked = [...this.state.checked]
+    let formData = [...this.state.formData]
     
-    if (checkAll) {
+    if(checkAll) {
       for(let i=0; i < userCount; i++) {
         checked.push(i)
       }
     } else {
       checked = []
+      formData = []
     }
     
     this.setState({
       checkAll,
-      checked
+      checked,
+      formData
     })
   }
   handleCheckRow = e => {
     const id = parseInt(e.target.dataset.id)
     const checked = [...this.state.checked]
+    let formData = [...this.state.formData]
     
-    if (checked.indexOf(id) === -1) {
+    if(checked.indexOf(id) === -1) {
       checked.push(id)
       
       const userCount = this.props.userContext.users.length
@@ -60,9 +83,12 @@ class UsersPage extends Component {
       }))
     } else {
       checked.splice(checked.indexOf(id), 1)
+      formData = checked.length > 0 ? formData : []
+      
       this.setState({
         checkAll: false,
-        checked
+        checked,
+        formData
       })
     }
   }
@@ -75,42 +101,68 @@ class UsersPage extends Component {
   // CRUD Handlers
   handleNewUser = () => {
     this.setState({
-      formType: 'new'
+      formType: 'new',
+      formTitle: 'Add User'
     })
   }
   handleUpdateUsers = () => {
     const Users = []
     const checked = this.state.checked
     const { users } = this.props.userContext
+    
+    // use filter to siphon out the users
     users.forEach((user, i) => {
       checked.indexOf(i) !== -1 && Users.push(user)
     })
     
+    const formTitle = `Update User${checked.length > 1 ? 's' : ''}`
+    
     this.setState({
       formType: 'update',
-      updateUsers: Users
+      formTitle: formTitle,
+      formData: Users
     })
   }
-  handleDelete = () => {
-    const Users = []
-    const checked = this.state.checked
+  handleDeleteUsers = () => {
+    const { checked } = this.state
     const { users } = this.props.userContext
     
     users.forEach((user, i) => {
-      checked.indexOf(i) !== -1 && Users.push(user.email)
+      checked.indexOf(i) !== -1 && 
+        this.props.deleteUser(user._id)
     })
     
-    Users.length > 0 && this.props.dispatch(deleteUsers(Users))
-    getUsers()
+    this.props.getUsers()
+  }
+  handleSaveAll = () => {
+    this.setState({
+      saveAll: true
+    })
   }
   
-  
   render() {
-    const { formType, 
-            updateUsers,
-            checked,
-            checkAll } = this.state
     const { users } = this.props.userContext
+    const { checkAll,
+            checked,
+            formType, 
+            formTitle,
+            formData,
+            saveAll } = this.state
+    const closeOnSave = formData.length > 1 ? false : true
+    
+    const form = formType === 'update' 
+      ? formData.map((data, i) => (
+          <UserForm 
+            key={`user-form-${i}`} 
+            id={data._id} 
+            dataId={++i}
+            lastForm={formData.length}
+            type={formType} 
+            closeOnSave={closeOnSave} 
+            saveAll={saveAll}
+            data={data} />
+        ))
+      : <UserForm type={formType} />
     
     return (
       <section className="container-fluid p-0">
@@ -176,7 +228,9 @@ class UsersPage extends Component {
             </tbody>
           </table>
         </section>
-        <UserForm formType={formType} users={updateUsers} />
+        <Modal id="userFormModal" title={formTitle} label="userFormModalLabel" saveAll={this.handleSaveAll}>
+          {form}
+        </Modal>
       </section>
     )
   }
@@ -184,6 +238,11 @@ class UsersPage extends Component {
 
 const mapStateToProps = state => state
 
+const mapDispatchToProps = dispatch => ({
+  getUsers: () => dispatch(getUsers()),
+  updateUser: (id) => dispatch(updateUser(id)),
+  deleteUser: (id) => dispatch(deleteUser(id))
+})
 
 
-export default connect(mapStateToProps, null)(withRouter(UsersPage))
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(UsersPage))

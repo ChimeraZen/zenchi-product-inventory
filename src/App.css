@@ -4,3 +4,11 @@ body,
   width: 100vw;
   height: 100vh;
 }
+
+.xy-overflow-hidden {
+  overflow: hidden;
+}
+
+.wx-max {
+  width: max-content;
+}

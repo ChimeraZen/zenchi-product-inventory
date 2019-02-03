@@ -9,9 +9,14 @@ export const loadingTypes = {
   DONE_LOADING: 'DONE_LOADING'
 }
 
+export const modalTypes = {
+  MODAL_OPEN: 'MODAL_OPEN',
+  MODAL_CLOSE: 'MODAL_CLOSE'
+}
+
 export const userTypes = {
   SET_CURRENT_USER: 'SET_CURRENT_USER',
-  GET_USERS: 'GET_USERS',
+  SET_USERS: 'SET_USERS',
   ADD_USER: 'ADD_USER'
 }
 

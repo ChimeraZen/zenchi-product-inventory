@@ -7,7 +7,7 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch(action.type) {
-    case userTypes.GET_USERS:
+    case userTypes.SET_USERS:
       return {
         ...state,
         users: action.payload.data

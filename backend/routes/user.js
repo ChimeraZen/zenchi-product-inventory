@@ -15,11 +15,11 @@ router.get('/getUsers', userController.getUsers)
 
 
 // Update
-router.post('/updateUsers', userController.updateUsers)
+router.post('/:id/updateUser', userController.updateUser)
 
 
 // Delete
-router.delete('/deleteUsers', userController.deleteUsers)
+router.delete('/:id/deleteUser', userController.deleteUser)
 
 
 // Login

@@ -7,7 +7,7 @@ import { Route, withRouter, Redirect } from 'react-router-dom'
 let ProtectedRoute = ({ component: Component, isAuthenticated }) => (
   <Route
     render={props => {
-      if (isAuthenticated) {
+      if(isAuthenticated) {
         return <Component {...props} />
       } else {
         return <Redirect to="/login" />

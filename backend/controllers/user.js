@@ -67,12 +67,14 @@ module.exports.getUsers = async (req, res) => {
 
 
 // Update
-module.exports.updateUsers = async (req, res) => {
+module.exports.updateUser = async (req, res) => {
   try {
+    const { id } = req.params
     const user = req.body
-    await User.findByIdAndUpdate({ _id: user._id }, user)
     
-    return res.status(204)
+    await User.findByIdAndUpdate({ _id: id }, user)
+    
+    return res.status(200).json({msg: 'User updated successfully'})
   } catch (err) {
     console.error(`There was an error updating users: ${err}`)
     return res.status(400)
@@ -81,12 +83,12 @@ module.exports.updateUsers = async (req, res) => {
 
 
 // Delete
-module.exports.deleteUsers = async (req, res) => {
+module.exports.deleteUser = async (req, res) => {
   try {
-    const { users } = req.body
+    const { id } = req.params
     
-    await User.deleteMany({ email: {$in: users}})
-    return res.status(204)
+    await User.findByIdAndDelete({ _id: id })
+    return res.status(200).json({msg: 'User deleted successfully'})
   } catch (err) {
     console.error(`There was an error deleting users: ${err}`)
     return res.status(400)

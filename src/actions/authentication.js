@@ -10,7 +10,7 @@ export const loginUser = user => async dispatch => {
   try{
     const res = await axios.post(`${SERVER_URL}/login`, user)
     
-    if (res) {
+    if(res) {
       const { token } = res.data
       localStorage.setItem('jwtToken', token)
       setAuthToken(token)

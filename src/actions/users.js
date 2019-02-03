@@ -16,7 +16,7 @@ const loading = state => {
 // Reducer Setters
 const setUsers = users => {
   return {
-    type: userTypes.GET_USERS,
+    type: userTypes.SET_USERS,
     payload: users
   }
 }
@@ -48,12 +48,12 @@ export const getUsers = () => async dispatch => {
 
 
 // Update
-export const updateUsers = users => dispatch => {
-  axios.post(`${SERVER_URL}/updateUsers`, users)
+export const updateUser = (id, user) => dispatch => {
+  axios.post(`${SERVER_URL}/${id}/updateUser`, user)
 }
 
 
 // Delete
-export const deleteUsers = users => dispatch => {
-  axios.delete(`${SERVER_URL}/deleteUsers`, users)
+export const deleteUser = id => dispatch => {
+  axios.delete(`${SERVER_URL}/${id}/deleteUser`)
 }

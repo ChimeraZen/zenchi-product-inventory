@@ -1,13 +1,16 @@
 // reducers/index.js
 import { combineReducers } from 'redux'
-import errorReducer from './errorReducer'
-import authReducer from './authReducer'
-//import productReducer from './productReducer'
-import userReducer from './userReducer'
+import errorReducer from './error'
+import authReducer from './auth'
+
+import modalReducer from './modal'
+//import productReducer from './product'
+import userReducer from './user'
 
 export default combineReducers({
   errors: errorReducer,
   auth: authReducer,
+  modal: modalReducer,
   //inventory: productReducer,
   userContext: userReducer,
 })
