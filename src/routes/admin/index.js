@@ -29,9 +29,9 @@ class AdminRoute extends Component {
     const { isOpen } = this.state
     
     return (
-      <section className="admin-route container-fluid p-0 d-flex">
-        <aside className={`col-lg-2 col-md-2 col-sm-2 p-0 navbar-dark bg-dark ${isOpen ? "open" : "closed"}`}>
-          <ul className="navbar-nav px-2">
+      <section className="admin-route container-fluid h-100 p-0 d-flex">
+        <aside className={`sidebar p-0 navbar-dark bg-dark ${isOpen ? "open" : "closed"}`}>
+          <ul className={`navbar-nav col-1 px-3 py-1`}>
             <li className="nav-item">
               <NavLink className="nav-link d-flex flex-nowrap" exact to="/admin">
                 <i className="fab fa-fort-awesome mr-2 my-auto"></i>

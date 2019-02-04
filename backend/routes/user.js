@@ -5,6 +5,8 @@ const router = express.Router()
 // Controllers
 const userController = require('../controllers/user')
 
+// Pagination
+router.get('/getUserCount', userController.getUserCount)
 
 // Create
 router.put('/addUser', userController.addUser)

@@ -1,14 +1,19 @@
-html,
-body,
-#root {
-  width: 100vw;
-  height: 100vh;
-}
-
 .xy-overflow-hidden {
   overflow: hidden;
 }
 
+
+/* Flex */
+.f-auto {
+  flex: 0 0 auto;
+}
+
+
+/* Width */
 .wx-max {
   width: max-content;
+}
+
+.pointer {
+  cursor: pointer;
 }

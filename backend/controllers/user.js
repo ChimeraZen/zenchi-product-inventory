@@ -7,6 +7,18 @@ const validateLoginInput = require('../validation/login')
 // Models
 const User = require('../models/User')
 
+// Pagination
+module.exports.getUserCount = async (req, res) => {
+  try {
+    const users = await User.find()
+    const userCount = users.length
+    return res.status(200).json(userCount)
+  } catch(err) {
+    console.error(`There was an error getting user count: ${err}`)
+    return res.status(400)
+  }
+}
+
 // Create
 module.exports.addUser = async (req, res) => {
   try {
@@ -57,7 +69,16 @@ module.exports.addUser = async (req, res) => {
 // Read
 module.exports.getUsers = async (req, res) => {
   try {
+    const perPage = parseInt(req.query.perPage) || 10
+    const activePage = parseInt(req.query.activePage) || 5
+    const { sortBy, direction } = req.query
+    const skip = perPage === 0 ? perPage : perPage * (activePage - 1)
+    
     const users = await User.find()
+                            .skip(skip)
+                            .limit(perPage)
+                            .sort({ [sortBy]: direction })
+    
     return res.status(200).json( users )
   } catch (err) {
     console.error(`There was an error getting users: ${err}`)

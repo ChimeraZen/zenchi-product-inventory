@@ -1,18 +1,26 @@
 section.admin-route {
-  height: stretch;
+  position: relative;
+  min-height: 100vh;
+}
+
+.sidebar {
+  max-width: 200px;
 }
 
 .open {
-  max-width: inherit;
-  transition: max-width 0.3s ease-in-out;
+  transition: max-width 0.5s ease-out;
 }
 
 .closed {
   max-width: 0 !important;
-  overflow: hidden;
-  transition: max-width 0.3s ease-in-out;
+  transition: max-width 0.3s ease-out;
 }
 
 .pointer {
   cursor: pointer;
+}
+
+.sticky-top {
+  position: sticky;
+  top: 0;
 }

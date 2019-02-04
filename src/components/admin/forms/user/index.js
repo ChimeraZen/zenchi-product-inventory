@@ -7,18 +7,20 @@ import $ from 'jquery'
 // Actions
 import { addUser, getUsers, updateUser } from 'actions/users'
 
+const initialState = {
+  username: '',
+  firstname: '',
+  lastname: '',
+  email: '',
+  changePassword: false,
+  password: '',
+  passwordConfirm: '',
+  role: 'staff',
+  errors: {}
+}
+
 class UserForm extends Component {
-  state = {
-    username: '',
-    firstname: '',
-    lastname: '',
-    email: '',
-    changePassword: false,
-    password: '',
-    passwordConfirm: '',
-    role: 'staff',
-    errors: {}
-  }
+  state = initialState
 
   componentDidMount() {
     const { data } = this.props
@@ -34,7 +36,11 @@ class UserForm extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if(this.props.saveAll) {
-    
+      const { perPage, 
+              activePage, 
+              sortBy, 
+              direction } = this.props.userContext
+      
       const { username,
               firstname,
               lastname,
@@ -60,7 +66,7 @@ class UserForm extends Component {
       this.props.updateUser(this.props.id, user)
       
       if(this.props.dataId === this.props.lastForm) {
-        this.props.getUsers()
+        this.props.getUsers({ perPage, activePage, sortBy, direction })
         $('.close').click()
       }
     }
@@ -79,11 +85,15 @@ class UserForm extends Component {
       changePassword: !this.state.changePassword
     })
   }
-  handleSubmit = e => {
+  handleSubmit = async e => {
     e.preventDefault()
     
-    const closeOnSave = this.props.closeOnSave
-    const { type } = this.props
+    const { type, closeOnSave } = this.props
+    
+    const { perPage, 
+            activePage, 
+            sortBy, 
+            direction } = this.props.userContext
     
     const { username,
             firstname,
@@ -120,10 +130,13 @@ class UserForm extends Component {
       break;
     }
     
-    this.props.getUsers()
+    this.props.getUsers({ perPage, activePage, sortBy, direction })
+    
     if(closeOnSave) {
       $('.close').click()
     }
+    
+    this.setState(initialState)
   }
   
   render() {
@@ -302,12 +315,13 @@ UserForm.propTypes = {
 
 const mapStateToProps = state => ({
   auth: state.auth,
+  userContext: state.userContext,
   errors: state.errors
 })
 
 const mapDispatchToProps = dispatch => ({
   addUser: (user) => dispatch(addUser(user)),
-  getUsers: () => dispatch(getUsers()),
+  getUsers: (params) => dispatch(getUsers(params)),
   updateUser: (id, user) => dispatch(updateUser(id, user))
 })
 
