@@ -10,11 +10,6 @@ export const loadingTypes = {
   LOADING_USERS: 'LOADING_USERS'
 }
 
-export const modalTypes = {
-  MODAL_OPEN: 'MODAL_OPEN',
-  MODAL_CLOSE: 'MODAL_CLOSE'
-}
-
 export const userTypes = {
   SET_CURRENT_USER: 'SET_CURRENT_USER',
   SET_USERS: 'SET_USERS'
