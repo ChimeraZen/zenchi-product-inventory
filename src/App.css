@@ -1,3 +1,9 @@
+html,
+body,
+root {
+  width: 100%;
+  height: 100%;
+}
 .xy-overflow-hidden {
   overflow: hidden;
 }
@@ -16,4 +22,31 @@
 
 .pointer {
   cursor: pointer;
+}
+
+
+/* Filters */
+legend.filters {
+  font-size: 1rem;
+}
+
+
+/* Loading */
+.loading-spinner {
+  top: 0;
+  left: 0;
+  background: rgba(255, 255, 255, 0.3);
+  z-index: 1000;
+}
+
+
+/* Tables */
+table.not-loaded {
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out; 
+}
+
+table.loaded {
+  opacity: 1;
+  transition: opacity 0.3s ease-in-out; 
 }

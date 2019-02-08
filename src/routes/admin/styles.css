@@ -19,8 +19,3 @@ section.admin-route {
 .pointer {
   cursor: pointer;
 }
-
-.sticky-top {
-  position: sticky;
-  top: 0;
-}

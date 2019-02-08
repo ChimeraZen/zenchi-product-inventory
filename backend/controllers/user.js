@@ -10,7 +10,18 @@ const User = require('../models/User')
 // Pagination
 module.exports.getUserCount = async (req, res) => {
   try {
+    const { filters } = req.query
+    
+    let userFilters = filters.split(':')
+    userFilters = userFilters[1] === ''
+      ? userFilters[1]
+      : {[userFilters[0]]: {
+          $eq: userFilters[1]
+        }}
+    
     const users = await User.find()
+                            .where(userFilters)
+    
     const userCount = users.length
     return res.status(200).json(userCount)
   } catch(err) {
@@ -69,15 +80,23 @@ module.exports.addUser = async (req, res) => {
 // Read
 module.exports.getUsers = async (req, res) => {
   try {
-    const perPage = parseInt(req.query.perPage) || 10
-    const activePage = parseInt(req.query.activePage) || 5
-    const { sortBy, direction } = req.query
+    const perPage = parseInt(req.query.perPage) || 0
+    const activePage = parseInt(req.query.activePage) || 1
+    const { sortBy, direction, filters } = req.query
     const skip = perPage === 0 ? perPage : perPage * (activePage - 1)
+    
+    let userFilters = filters.split(':')
+    userFilters = userFilters[1] === ''
+      ? userFilters[1]
+      : {[userFilters[0]]: {
+          $eq: userFilters[1]
+        }}
     
     const users = await User.find()
                             .skip(skip)
                             .limit(perPage)
                             .sort({ [sortBy]: direction })
+                            .where(userFilters)
     
     return res.status(200).json( users )
   } catch (err) {

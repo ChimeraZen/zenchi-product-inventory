@@ -1,54 +1,29 @@
-// reducers/userReducer.js
-import { userTypes, loadingTypes, pageTypes } from '../actions/types'
+// reducers/user.js
+import { userTypes, loadingTypes } from 'actions/types'
 
 const initialState = {
   users: [],
-  perPage: 10,
-  activePage: 1,
-  pageCount: 1,
-  sortBy: 'email',
-  direction: 'asc',
+  userCount: 0,
   isLoading: false
 }
 
 export default (state = initialState, action) => {
   switch(action.type) {
+    
+    // User actions
     case userTypes.SET_USERS:
       return {
         ...state,
-        users: action.payload.data
+        users: action.payload
+      }
+    case userTypes.SET_USER_COUNT:
+      return {
+        ...state,
+        userCount: action.payload
       }
       
       
-    // Page Params
-    case pageTypes.SET_ACTIVE_PAGE:
-      return {
-        ...state,
-        activePage: action.payload
-      }
-    case pageTypes.SET_PER_PAGE:
-      return {
-        ...state,
-        perPage: action.payload
-      }
-    case pageTypes.SET_PAGE_COUNT:
-      return {
-        ...state,
-        pageCount: action.payload
-      }
-    case pageTypes.SET_SORT_BY:
-      return {
-        ...state,
-        sortBy: action.payload
-      }
-    case pageTypes.SET_SORT_DIRECTION:
-      return {
-        ...state,
-        direction: action.payload
-      }
-      
-      
-    // Loading
+    // Loading actions
     case loadingTypes.LOADING_USERS:
       return {
         ...state,

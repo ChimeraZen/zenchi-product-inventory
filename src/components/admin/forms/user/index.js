@@ -5,7 +5,7 @@ import classnames from 'classnames'
 import $ from 'jquery'
 
 // Actions
-import { addUser, getUsers, updateUser } from 'actions/users'
+import { addUser, updateUser } from 'actions/users'
 
 const initialState = {
   username: '',
@@ -22,6 +22,7 @@ const initialState = {
 class UserForm extends Component {
   state = initialState
 
+  // Lifecycle
   componentDidMount() {
     const { data } = this.props
     
@@ -33,22 +34,20 @@ class UserForm extends Component {
       role: data.role
     })
   }
-
   componentDidUpdate(prevProps, prevState) {
-    if(this.props.saveAll) {
-      const { perPage, 
-              activePage, 
-              sortBy, 
-              direction } = this.props.userContext
-      
-      const { username,
-              firstname,
-              lastname,
-              email,
-              changePassword,
-              password,
-              passwordConfirm,
-              role } = this.state
+    const { id, saveAll } = this.props
+    
+    if(saveAll && id && saveAll) {
+      const { 
+        username,
+        firstname,
+        lastname,
+        email,
+        changePassword,
+        password,
+        passwordConfirm,
+        role 
+      } = this.state
 
       const user = {
         username: username,
@@ -63,10 +62,9 @@ class UserForm extends Component {
         user.passwordConfirm = passwordConfirm
       }
       
-      this.props.updateUser(this.props.id, user)
+      this.props.updateUser({id, user})
       
       if(this.props.dataId === this.props.lastForm) {
-        this.props.getUsers({ perPage, activePage, sortBy, direction })
         $('.close').click()
       }
     }
@@ -85,15 +83,9 @@ class UserForm extends Component {
       changePassword: !this.state.changePassword
     })
   }
-  handleSubmit = async e => {
+  handleSubmit = e => {
     e.preventDefault()
-    
     const { type, closeOnSave } = this.props
-    
-    const { perPage, 
-            activePage, 
-            sortBy, 
-            direction } = this.props.userContext
     
     const { username,
             firstname,
@@ -120,22 +112,24 @@ class UserForm extends Component {
     switch(type) {
       case 'new':
         this.props.addUser(user)
+        $('.close').click()
+        this.handleReset()
       break;
         
       case 'update':
         this.props.updateUser(this.props.id, user)
+        if(closeOnSave) {
+          $('.close').click()
+          this.handleReset()
+        }
       break;
         
       default:
       break;
     }
-    
-    this.props.getUsers({ perPage, activePage, sortBy, direction })
-    
-    if(closeOnSave) {
-      $('.close').click()
-    }
-    
+  }
+  
+  handleReset = () => {
     this.setState(initialState)
   }
   
@@ -157,9 +151,9 @@ class UserForm extends Component {
         {/* Username */}
         <div className="form-row">
           <div className="form-group col-md-12">
-            <label htmlFor="user-name">Username</label>
+            <label htmlFor={`user-username-${this.props.id}`}>Username</label>
             <input
-              id="user-name"
+              id={`user-username-${this.props.id}`}
               type="text"
               placeholder="Username"
               className={classnames('form-control form-control-lg', {
@@ -177,9 +171,9 @@ class UserForm extends Component {
         {/* Name */}
         <div className="form-row">
           <div className="form-group col-md-6">
-            <label htmlFor="user-first-name">Name</label>
+            <label htmlFor={`user-firstname-${this.props.id}`}>Name</label>
             <input
-              id="user-first-name"
+              id={`user-firstname-${this.props.id}`}
               type="text"
               placeholder="First Name"
               className={classnames('form-control form-control-lg', {
@@ -192,9 +186,9 @@ class UserForm extends Component {
             {errors.firstname && (<div className="invalid-feedback">{errors.firstname}</div>)}
           </div>
           <div className="form-group col-md-6">
-            <label htmlFor="user-last-name">&nbsp;</label>
+            <label htmlFor={`user-lastname-${this.props.id}`}>&nbsp;</label>
             <input
-              id="user-last-name"
+              id={`user-lastname-${this.props.id}`}
               type="text"
               placeholder="Last Name"
               className={classnames('form-control form-control-lg', {
@@ -212,9 +206,9 @@ class UserForm extends Component {
         {/* Email */}
         <div className="form-row">
           <div className="form-group col-12">
-            <label htmlFor="user-email">Email</label>
+            <label htmlFor={`user-email-${this.props.id}`}>Email</label>
             <input
-              id="user-email"
+              id={`user-email-${this.props.id}`}
               type="email"
               placeholder="Email"
               className={classnames('form-control form-control-lg', {
@@ -234,9 +228,9 @@ class UserForm extends Component {
           {
             type === 'update' && 
               <div className="form-check form-check-inline col-12 mb-2">
-                <label htmlFor="change-user-password" className="form-check-label mr-2">Change Password</label>
+                <label htmlFor={`change-user-password-${this.props.id}`} className="form-check-label mr-2">Change Password</label>
                 <input 
-                  id="change-user-password" 
+                  id={`change-user-password-${this.props.id}`}
                   className="form-check-input"
                   type="checkbox" 
                   onChange={this.handleChangePassword}
@@ -251,12 +245,12 @@ class UserForm extends Component {
                 <div className="form-group col-12">
                   {
                     type === 'new' && 
-                      <label htmlFor="user-password">
+                      <label htmlFor={`user-password-${this.props.id}`}>
                         Password
                       </label>
                   }
                   <input
-                    id="user-password"
+                    id={`user-password-${this.props.id}`}
                     type="password"
                     placeholder="Password"
                     className={classnames('form-control form-control-lg', {
@@ -290,8 +284,8 @@ class UserForm extends Component {
         {/* Role */}
         <div className="form-row">
           <div className="form-group col-12">
-            <label htmlFor="user-role">Role:</label>
-            <select id="user-role" name="role" className="custom-select" value={ role } onChange={this.handleInputChange}>
+            <label htmlFor={`user-role-${this.props.id}`}>Role:</label>
+            <select id={`user-role-${this.props.id}`} name="role" className="custom-select" value={ role } onChange={this.handleInputChange}>
               <option value="super">Super User</option>
               <option value="admin">Admin</option>
               <option value="staff">Staff</option>
@@ -310,7 +304,8 @@ class UserForm extends Component {
 }
 
 UserForm.propTypes = {
-  auth: PropTypes.object.isRequired
+  auth: PropTypes.object.isRequired,
+  type: PropTypes.string.isRequired
 }
 
 const mapStateToProps = state => ({
@@ -320,9 +315,8 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  addUser: (user) => dispatch(addUser(user)),
-  getUsers: (params) => dispatch(getUsers(params)),
-  updateUser: (id, user) => dispatch(updateUser(id, user))
+  addUser: user => dispatch(addUser(user)),
+  updateUser: params => dispatch(updateUser(params))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserForm)

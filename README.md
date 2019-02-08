@@ -3,7 +3,7 @@
 **Description**:  The ZenChi Product Inventory app uses MERN to connect to MongoDB and Redux reducers to handle
                   state management.
 
-**Version**:      [0.2.2](#v022)  
+**Version**:      [0.3.1](#v03.1)  
 **Author**:       Elijah Liedtke (Chimera.Zen)  
 **Email**:        [chimera.zen@gmail.com](mailto:chimera.zen@gmail.com)  
 **Link**:         https://github.com/ChimeraZen/zenchi-product-inventory
@@ -17,6 +17,19 @@
 ---
 
 ## ChangeLog
+### v0.3.1
+* Initialized userFormReducer
+* Initialized userTableReducer
+* Modified userReducer to handle user CRUD 
+* Modified user controller to handle new dispatches
+* Updated Modal component to detect when it's open and then closed
+* Updated UserForm to handle new dispatches
+* Fixed CRUD operations
+
+* (User Controller && User Actions && UsersTable) getUsers() needs to be updated to handle multiple filters
+
+
+
 ### v0.2.2
 * Initialized multi-modal:
   * saveAll
